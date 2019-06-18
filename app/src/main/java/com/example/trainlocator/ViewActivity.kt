@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trainlocator.adapters.TimelineAdapter
 import com.example.trainlocator.models.Station
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_view.*
 
 class ViewActivity : AppCompatActivity() {
@@ -18,9 +19,12 @@ class ViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view)
 
-        val messageString = intent.extras?.getString("message")
+        val routeDetails = intent.extras?.getString("route_details")
 
-        setDataListItems()
+        if(!routeDetails.isNullOrEmpty()) {
+            var gson = Gson()
+            mDataList.addAll(gson.fromJson(routeDetails,Array<Station>::class.java).asList())
+        }
         initRecyclerView()
 
     }
@@ -28,12 +32,12 @@ class ViewActivity : AppCompatActivity() {
     private fun setDataListItems() {
         mDataList.add(Station("Dodoma", "", "inactive"))
         mDataList.add(Station("Mpwapwa", "2017-02-12 08:00", "inactive"))
-        mDataList.add(Station("Maghubike", "2017-02-11 21:00", "active"))
-        mDataList.add(Station("Gairo", "2017-02-11 18:00", "completed"))
-        mDataList.add(Station("Morogoro", "2017-02-11 09:30", "completed"))
-        mDataList.add(Station("Chalinze", "2017-02-11 08:00", "completed"))
-        mDataList.add(Station("Mlandizi", "2017-02-10 15:00", "completed"))
-        mDataList.add(Station("Kibaha", "2017-02-10 14:30", "completed"))
+        mDataList.add(Station("Maghubike", "2017-02-11 21:00", "inactive"))
+        mDataList.add(Station("Gairo", "2017-02-11 18:00", "inactive"))
+        mDataList.add(Station("Morogoro", "2017-02-11 09:30", "inactive"))
+        mDataList.add(Station("Chalinze", "2017-02-11 08:00", "inactive"))
+        mDataList.add(Station("Mlandizi", "2017-02-10 15:00", "inactive"))
+        mDataList.add(Station("Kibaha", "2017-02-10 14:30", "active"))
         mDataList.add(Station("Dar es Salaam", "2017-02-10 14:00", "completed"))
     }
 

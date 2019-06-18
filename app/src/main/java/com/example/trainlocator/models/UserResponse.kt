@@ -11,12 +11,14 @@ class User {
     var name: String? = null
     @SerializedName("email")
     var email: String? = null
+    @SerializedName("phone")
+    var phone: String? = null
 }
 
 class UserResponse {
 
     @SerializedName("status")
-    var status: String?= null
+    var status: Boolean?= null
     @SerializedName("user")
     var user: User? = null
 }

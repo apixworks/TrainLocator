@@ -9,7 +9,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trainlocator.models.UserResponse
-import com.example.trainlocator.utils.LoginApi
+import com.example.trainlocator.utils.ServerApi
+import com.example.trainlocator.utils.SharedPreference
 import com.google.gson.Gson
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_login.*
@@ -20,7 +21,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class LoginActivity : AppCompatActivity() {
 
@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val api = retrofit.create(LoginApi::class.java)
+        val api = retrofit.create(ServerApi::class.java)
 
         val call = api.loginUser(email,password)
 
@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         Log.i("onSuccess", gson.toJson(response.body()))
-                        parseRegisterData(gson.toJson(response.body()))
+                        parseLoginData(response.body()!!)
                         dialog.hide()
                     } else {
                         Log.i(
@@ -98,6 +98,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this@LoginActivity,"Login Unsuccessful!",Toast.LENGTH_SHORT).show()
                     dialog.hide()
                 }
+
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
@@ -107,10 +108,12 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun parseRegisterData(response: String){
+    private fun parseLoginData(response: UserResponse){
         try {
-            val jsonObject = JSONObject(response)
-            if(jsonObject.getBoolean("status")){
+            if(response.status!!){
+                val sharedPreference = SharedPreference(this@LoginActivity)
+                sharedPreference.save("name",response.user!!.name.toString())
+                sharedPreference.save("phone",response.user!!.phone.toString())
                 email.setText("")
                 password.setText("")
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)

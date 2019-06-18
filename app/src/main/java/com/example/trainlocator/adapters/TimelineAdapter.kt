@@ -45,7 +45,7 @@ class TimelineAdapter (private val mFeedList: List<Station>, private val context
 
         if (station.date.isNotEmpty()) {
             holder.date.visibility = View.VISIBLE
-            holder.date.text = DateTimeUtils.parseDateTime(station.date, "yyyy-MM-dd HH:mm", "hh:mm a, dd-MMM-yyyy")
+            holder.date.text = station.date
         } else
             holder.date.visibility = View.GONE
 

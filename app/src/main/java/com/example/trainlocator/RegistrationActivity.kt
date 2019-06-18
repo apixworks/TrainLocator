@@ -17,7 +17,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.trainlocator.utils.LoginApi
+import com.example.trainlocator.utils.ServerApi
+import com.example.trainlocator.utils.SharedPreference
 import org.json.JSONException
 
 
@@ -36,9 +37,10 @@ class RegistrationActivity : AppCompatActivity() {
             val nameString = name.text.toString()
             val emailString = email.text.toString()
             val passwordString= password.text.toString()
+            val phoneString= phone.text.toString()
             if(nameString.isNotEmpty() and emailString.isNotEmpty() and passwordString.isNotEmpty()){
                 if(verifyAvailableNetwork(this@RegistrationActivity)){
-                    register(nameString,emailString,passwordString)
+                    register(nameString,emailString,passwordString,phoneString)
                 }else{
                     Toast.makeText(this@RegistrationActivity,"Please check Connection!",Toast.LENGTH_SHORT).show()
                 }
@@ -48,7 +50,7 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
-    private fun register(name:String, email:String, password:String){
+    private fun register(name:String, email:String, password:String, phone:String){
         Log.i("EditText values: ",name+" "+email+" "+password)
         dialog = SpotsDialog.Builder()
             .setContext(this@RegistrationActivity)
@@ -66,9 +68,9 @@ class RegistrationActivity : AppCompatActivity() {
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
-        val api = retrofit.create(LoginApi::class.java)
+        val api = retrofit.create(ServerApi::class.java)
 
-        val call = api.registerUser(name,email,password)
+        val call = api.registerUser(name,email,password,phone)
 
         call.enqueue(object : Callback<String> {
 
@@ -109,6 +111,7 @@ class RegistrationActivity : AppCompatActivity() {
                 name.setText("")
                 email.setText("")
                 password.setText("")
+                phone.setText("")
                 Toast.makeText(this@RegistrationActivity,"Successful Registered!",Toast.LENGTH_SHORT).show()
                 val intent = Intent(this@RegistrationActivity, LoginActivity::class.java)
                 startActivity(intent)

@@ -5,13 +5,14 @@ import android.util.Log
 import com.example.trainlocator.utils.NotificationUtil
 import com.example.trainlocator.ViewActivity
 import com.example.trainlocator.models.NotificationVO
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     val TAG = "MyFirebaseIdService"
-    val TOPIC_GLOBAL = "global"
+//    val TOPIC_GLOBAL = "global"
     val TITTLE = "title"
     val EMPTY = ""
     val MESSAGE = "message"
@@ -66,7 +67,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //                    msg = "Failed to subscribe to " + TOPIC_GLOBAL
 //                }
 //                Log.d(TAG, msg)
-//                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 //            }
     }
 
@@ -77,20 +77,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         var resultIntent = Intent(applicationContext, ViewActivity::class.java)
         var notificationUtil = NotificationUtil(applicationContext)
-        resultIntent.putExtra("message",message)
+        resultIntent.putExtra("route_details",message)
         notificationUtil.displayNotification(notificationVO, resultIntent)
         notificationUtil.playNotificationSound()
     }
 
     private fun handleData(data: Map<String, String>){
+        Log.d("Hapa","imefika")
         var title: String = data.get(TITTLE).toString()
         var message: String = data.get(MESSAGE).toString()
         var action: String = data.get(ACTION).toString()
         var actionDestination: String = data.get(ACTION_DESTINATION).toString()
+        var data: String = data.get(DATA).toString()
         var notificationVO = NotificationVO(title,message,action,actionDestination)
 
         var resultIntent = Intent(applicationContext, ViewActivity::class.java)
-        resultIntent.putExtra("message",message)
+        resultIntent.putExtra("route_details",data)
 
         var notificationUtil = NotificationUtil(applicationContext)
         notificationUtil.displayNotification(notificationVO, resultIntent)
