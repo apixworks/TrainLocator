@@ -50,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
         sign_up_txt.setOnClickListener{
             val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 
@@ -103,6 +104,7 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                 Toast.makeText(this@LoginActivity,"Login Unsuccessful!",Toast.LENGTH_SHORT).show()
+                Log.i("onFailure", t.message)
                 dialog.hide()
             }
         })
@@ -117,7 +119,9 @@ class LoginActivity : AppCompatActivity() {
                 email.setText("")
                 password.setText("")
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                intent.putExtra("user_id",response.user!!.id)
                 startActivity(intent)
+                finish()
             }else{
                 Toast.makeText(this@LoginActivity,"Login Unsuccessful!",Toast.LENGTH_SHORT).show()
             }

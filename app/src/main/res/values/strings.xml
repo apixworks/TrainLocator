@@ -6,5 +6,5 @@
     </string>
     <string name="terms_and_condition">Terms and Condition</string>
     <!--<string name="serverURL">http://train.nyindahotels.com/train_api/public/</string>-->
-    <string name="serverURL">http://192.168.43.109/train_api/public/</string>
+    <string name="serverURL">http://192.168.43.143/train_api/public/</string>
 </resources>

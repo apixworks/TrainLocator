@@ -41,5 +41,5 @@ interface ServerApi {
     ): Call<BookingResponse>
 
     @GET("view/routes")
-    abstract fun getRoutes(): Call<RouteResponse>
+    fun getRoutes(): Call<RouteResponse>
 }

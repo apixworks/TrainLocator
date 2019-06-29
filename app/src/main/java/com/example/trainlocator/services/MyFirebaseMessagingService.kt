@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.trainlocator.utils.NotificationUtil
 import com.example.trainlocator.ViewActivity
 import com.example.trainlocator.models.NotificationVO
+import com.example.trainlocator.utils.SharedPreference
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -91,6 +92,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var data: String = data.get(DATA).toString()
         var notificationVO = NotificationVO(title,message,action,actionDestination)
 
+        var sharedPreference = SharedPreference(applicationContext)
+        sharedPreference.save("booking",data)
         var resultIntent = Intent(applicationContext, ViewActivity::class.java)
         resultIntent.putExtra("route_details",data)
 
